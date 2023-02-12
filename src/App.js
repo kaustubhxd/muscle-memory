@@ -1,23 +1,48 @@
-import logo from './logo.svg';
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
+import ExerciseLog from './pages/ExerciseLog';
+import Home from './pages/Home';
+import { BrowserRouter } from 'react-router-dom';
+
+// function ProtectedRoute({ children }) {
+//   // logout due to inactivity
+//   const { logoutByInactivity, showGlobalModal } = useAxiosClient()
+//   const dispatch = useDispatch()
+//   useEffect(() => {
+//     if (logoutByInactivity) {
+//       dispatch(discardAuthInfo())
+//       showGlobalModal({
+//         status: 'error',
+//         title: 'Inactivity Logout',
+//         body: 'You have been logged out due to inactivity. Please login again.'
+//       })
+//     }
+//   }, [logoutByInactivity])
+
+//   // check if auth data present in redux, if yes login
+//   const allowed = useSelector(loggedIn)
+//   // console.log({allowed})
+//   if (!allowed) {
+//     return <Navigate to="/" replace />
+//   }
+//   return <Outlet />
+// }
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <BrowserRouter>
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/log" element={<ExerciseLog />} />
+
+            {/* <Route element={<ProtectedRoute />}>
+              <Route path="/summary" element={<Summary />} />
+            </Route> */}
+          </Routes>
+      </BrowserRouter>
+        
     </div>
   );
 }
