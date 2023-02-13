@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import ExerciseLog from './pages/ExerciseLog';
 import Home from './pages/Home';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter as Router } from 'react-router-dom';
 
 // function ProtectedRoute({ children }) {
 //   // logout due to inactivity
@@ -32,7 +32,7 @@ function App() {
 
   return (
     <div>
-      <BrowserRouter>
+      <Router>
         <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/log" element={<ExerciseLog />} />
@@ -41,7 +41,7 @@ function App() {
               <Route path="/summary" element={<Summary />} />
             </Route> */}
           </Routes>
-      </BrowserRouter>
+      </Router>
         
     </div>
   );
