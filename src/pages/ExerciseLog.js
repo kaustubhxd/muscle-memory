@@ -8,8 +8,8 @@ import { Field, FieldArray, useFormik } from 'formik';
 import * as Yup from 'yup'
 import debounce from 'lodash.debounce';
 import CustomButton from '../common/CustomButton';
-import { Button, Form } from 'antd';
-import { BackwardFilled, CaretLeftOutlined, HomeOutlined, LeftCircleOutlined, LeftOutlined, SearchOutlined } from '@ant-design/icons';
+import { Button, Form, Tooltip } from 'antd';
+import { BackwardFilled, CaretLeftOutlined, HomeOutlined, InfoCircleOutlined, LeftCircleOutlined, LeftOutlined, SearchOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
 const RepWeightInput = ({index, reps, weight, onChange}) => 
@@ -124,13 +124,20 @@ const ExerciseLog = () =>  {
               console.log(value)
               formik.setFieldValue('selectedExercises', value)
             }}
+            optionSuffix={(option) =>   
+              <Tooltip title={<div className='poppins-500-11' onClick={() => {
+                console.log('gefe')
+                window.focus()
+              }}>{option.instructions}</div>} placement='bottom' trigger='click'>
+                <div><InfoCircleOutlined /></div>
+              </Tooltip>}
             labelKey='name'
             valueKey='name'
             randomKey
             loading={loading.exercises}
             formikHook={formik}
-            
           />
+
           <div className='flex gap-4 items-center justify-center mb-5'>
             <div className='flex-1'>
               <CustomInputNumber 

@@ -9,7 +9,7 @@ import debounce from 'lodash.debounce';
 const { Option } = Select
 
 const CustomSelect = ({placeholder, options, name, className, onSearch, onSelect, suffix, debounceSearch,
-  valueKey, labelKey, randomKey = false, loading, label, formikHook: formik, showError, errorText}) => {
+  valueKey, labelKey, randomKey = false, loading, label, formikHook: formik, showError, errorText, optionSuffix}) => {
 
     if (formik && name) {
       showError = showError || (formik.touched[name] && !!formik.errors[name])
@@ -62,7 +62,14 @@ const CustomSelect = ({placeholder, options, name, className, onSearch, onSelect
         >
             {options.map((option) => (
               <Option key={randomKey ? uuidv4() : option[valueKey]} value={option[valueKey]}>
-                {option[labelKey]} 
+                <div className='flex justify-between'>
+                  <div>{option[labelKey]}</div>
+                  <div 
+                  onClick={(e) => e.stopPropagation()}>
+                    {optionSuffix(option)}
+                  </div>
+                </div>
+                
               </Option>
             ))}
         </Select>
