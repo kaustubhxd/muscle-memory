@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/muscle-memory/static/css/main.fb782f23.css",
-    "main.js": "/muscle-memory/static/js/main.44445e69.js",
+    "main.js": "/muscle-memory/static/js/main.884656c3.js",
     "index.html": "/muscle-memory/index.html",
     "main.fb782f23.css.map": "/muscle-memory/static/css/main.fb782f23.css.map",
-    "main.44445e69.js.map": "/muscle-memory/static/js/main.44445e69.js.map"
+    "main.884656c3.js.map": "/muscle-memory/static/js/main.884656c3.js.map"
   },
   "entrypoints": [
     "static/css/main.fb782f23.css",
-    "static/js/main.44445e69.js"
+    "static/js/main.884656c3.js"
   ]
 }
