@@ -26,6 +26,7 @@ const CustomSelect = ({placeholder, options, name, className, onSearch, onSelect
     }
 
     // https://stackoverflow.com/questions/36294134/lodash-debounce-with-react-input
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const debounceFn = useCallback(debounce(handleDebounce, debounceSearch ? 300 : 0), []);
 
     const handleSearch =  (e) => {

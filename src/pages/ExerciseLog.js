@@ -4,12 +4,11 @@ import CustomSelect from '../common/CustomSelect';
 import CustomSwitch from '../common/CustomSwitch';
 import CustomInputNumber from '../common/CustomInputNumber';
 
-import { Field, FieldArray, useFormik } from 'formik';
+import { useFormik } from 'formik';
 import * as Yup from 'yup'
-import debounce from 'lodash.debounce';
 import CustomButton from '../common/CustomButton';
-import { Button, Form, Tooltip } from 'antd';
-import { BackwardFilled, CaretLeftOutlined, HomeOutlined, InfoCircleOutlined, LeftCircleOutlined, LeftOutlined, SearchOutlined } from '@ant-design/icons';
+import { Tooltip } from 'antd';
+import { CaretLeftOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
 const RepWeightInput = ({index, reps, weight, onChange}) => 

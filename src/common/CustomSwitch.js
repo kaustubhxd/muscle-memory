@@ -1,4 +1,4 @@
-import { Input, Switch } from 'antd'
+import { Switch } from 'antd'
 import React from 'react'
 
 const CustomSwitch = ({className, label, checkedText, uncheckedText, onChange, checked}) => {

@@ -1,4 +1,4 @@
-import { Input, InputNumber } from 'antd'
+import { InputNumber } from 'antd'
 import React from 'react'
 
 const CustomInput = ({placeholder, className, label, value, onChange, 
