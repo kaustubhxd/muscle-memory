@@ -1,4 +1,4 @@
-import { Button, Input } from 'antd'
+import { Button } from 'antd'
 import React from 'react'
 
 const CustomButton = ({className, label, children, type='primary', onClick, shape, icon,
