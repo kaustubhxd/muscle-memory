@@ -12,7 +12,7 @@ jobs:
           yarn install
           yarn build
         env:
-          REACT_APP_EXCERCISES_API_KEY: ${{ secrets.REACT_APP_EXCERCISES_API_KEY }}
+          REACT_APP_API: ${{ secrets.REACT_APP_API }}
           CI: false
 
       - name: Deploy 🚀
