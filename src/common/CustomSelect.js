@@ -8,7 +8,7 @@ import debounce from 'lodash.debounce';
 
 const { Option } = Select
 
-const CustomSelect = ({placeholder, options, name, className, onSearch, onSelect, suffix, debounceSearch,
+const CustomSelect = ({placeholder, options, name, className, onSearch, onSelect, suffix, debounceSearch, value,
   valueKey, labelKey, randomKey = false, loading, label, formikHook: formik, showError, errorText, optionSuffix}) => {
 
     if (formik && name) {
@@ -27,7 +27,7 @@ const CustomSelect = ({placeholder, options, name, className, onSearch, onSelect
 
     // https://stackoverflow.com/questions/36294134/lodash-debounce-with-react-input
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const debounceFn = useCallback(debounce(handleDebounce, debounceSearch ? 300 : 0), []);
+    const debounceFn = useCallback(debounce(handleDebounce, debounceSearch ? 700 : 0), []);
 
     const handleSearch =  (e) => {
       setSearchText(e)
@@ -41,6 +41,7 @@ const CustomSelect = ({placeholder, options, name, className, onSearch, onSelect
         <Select
             className='w-full'
             showSearch
+            value={value}
             status={showError ? "error" : ''}
             placeholder={placeholder}
             // optionFilterProp="children"

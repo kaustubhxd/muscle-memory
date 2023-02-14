@@ -54,25 +54,46 @@ const ExerciseLog = () =>  {
     exercises: false
   })
   const setLoading = (field, value) => _setLoading({...options, [field] : value})
+
+  const [logging, setLogging] = useState(false)
+
   const navigate = useNavigate()
 
   const DEFAULT_SETS = 3
   const DEFAULT_REPS = 15
   const DEFAULT_WEIGHT = 2.5
 
+  const handleLogExercise = (values) => {
+    console.log('onSubmit', values)
+    const {selectedExercise : name, isConsistent, sets, repList} = values
+
+    const payload = {
+      name, isConsistent, sets, repList
+    }
+
+    setLogging(true)
+    client.post('/log-exercise', payload ).then((res) => {
+      console.log(res)
+      formik.resetForm()
+    }).catch(e => {
+      console.log(e,'error')
+    }).finally(() => {
+      setLogging(false)
+    })
+  }
 
   const formik = useFormik({
     initialValues: {
-      selectedExercises: null,
+      selectedExercise: null,
       isConsistent: true,
       sets: DEFAULT_SETS,
-      repWeightList: [{reps: DEFAULT_REPS, weight: DEFAULT_WEIGHT}]
+      repList: [{reps: DEFAULT_REPS, weight: DEFAULT_WEIGHT}]
     },
     validationSchema: Yup.object({
-      selectedExercises: Yup.string().required('Please select an exercise').typeError('Please select an exercise'),
+      selectedExercise: Yup.string().required('Please select an exercise').typeError('Please select an exercise'),
       isConsistent: Yup.bool(),
       sets: Yup.number().required('Please enter the number of sets').typeError('Please enter the number of sets').min(1),
-      repWeightList: Yup.array()
+      repList: Yup.array()
       .of(Yup.object().shape({
         reps: Yup.number().required('Please enter the number of sets').typeError('Please enter the number of sets').min(1),
         weight: Yup.number().required('Please enter the number of sets').typeError('Please enter the number of sets').min(1),
@@ -82,23 +103,24 @@ const ExerciseLog = () =>  {
       // weight: Yup.number().required('Please enter the number of sets').typeError('Please enter the number of sets').min(1),
     }),
     onSubmit: values => {
-      console.log('onSubmit', values)
+      handleLogExercise(values)
     },
   });
 
   const getExcercises = (name) => {
     if(!name) return
     setLoading('exercises', true)
-    client.get('', { params: {name} }).then((res) => {
-      console.log(res.data,res)
-      // formik.setFieldValue('exercises', res.data)
+    client.get('/exercise', { params: {name} }).then((res) => {
+      console.log(res.data)
       setOptions('exercises', res.data)
     }).catch(e => {
-      console.log(e)
+      console.log(e,'error')
     }).finally(() => {
       setLoading('exercises', false)
     })
   }
+
+  console.log('formik.values', formik.values)
 
   return (
     <div className='pt-5 h-screen p-5 bg-red'>
@@ -113,15 +135,15 @@ const ExerciseLog = () =>  {
           <CustomSelect
             className='w-full mb-5'
             label='Exercise name'
-            name='selectedExercises'
+            name='selectedExercise'
             placeholder='Select exercise'
-            value={formik.values.selectedExercises}
+            value={formik.values.selectedExercise}
             options={options.exercises} 
             debounceSearch
             onSearch={(e) => getExcercises(e)}
             onSelect={value => {
               console.log(value)
-              formik.setFieldValue('selectedExercises', value)
+              formik.setFieldValue('selectedExercise', value)
             }}
             optionSuffix={(option) =>   
               <Tooltip title={<div className='poppins-500-11' onClick={() => {
@@ -147,7 +169,7 @@ const ExerciseLog = () =>  {
                 onChange={(value) => {
                   console.log(value)
                   formik.setFieldValue('sets', value)
-                  if(!formik.values.isConsistent) formik.setFieldValue('repWeightList', Array.from(Array(value).keys()).map(() => { return {reps: DEFAULT_REPS, weight: DEFAULT_WEIGHT} }))
+                  if(!formik.values.isConsistent) formik.setFieldValue('repList', Array.from(Array(value).keys()).map(() => { return {reps: DEFAULT_REPS, weight: DEFAULT_WEIGHT} }))
                 }}
                 formikHook={formik}
               />
@@ -161,7 +183,7 @@ const ExerciseLog = () =>  {
                   onChange={(isConsistent) => {
                     console.log(isConsistent)
                     formik.setFieldValue('isConsistent', isConsistent)
-                    if(!isConsistent) formik.setFieldValue('repWeightList', Array.from(Array(formik.values.sets).keys()).map(() => { return {reps: DEFAULT_REPS, weight: DEFAULT_WEIGHT} }))
+                    if(!isConsistent) formik.setFieldValue('repList', Array.from(Array(formik.values.sets).keys()).map(() => { return {reps: DEFAULT_REPS, weight: DEFAULT_WEIGHT} }))
 
                   }}
                 />}
@@ -172,17 +194,17 @@ const ExerciseLog = () =>  {
               <RepWeightInput 
                 formikHook={formik} 
                 index={0}
-                reps={formik.values.repWeightList[0].reps} 
-                weight={formik.values.repWeightList[0].weight} 
+                reps={formik.values.repList[0].reps} 
+                weight={formik.values.repList[0].weight} 
                 onChange={(key, value, index) => {
-                  const list = formik.values.repWeightList
+                  const list = formik.values.repList
                   list[index] = {...list[index], [key]: value}
-                  formik.setFieldValue('repWeightList', list)
+                  formik.setFieldValue('repList', list)
                 }}
               />
               : <>
-                {formik.values.repWeightList.length > 0 
-                  && formik.values.repWeightList.map(({reps,weight},i) => 
+                {formik.values.repList.length > 0 
+                  && formik.values.repList.map(({reps,weight},i) => 
                     <div key={i}>
                       <div className='flex items-center'>
                         <div className='mr-3'>{i+1 < 10 ? 0:''}{i + 1}</div>
@@ -192,10 +214,10 @@ const ExerciseLog = () =>  {
                           weight={weight} 
                           reps={reps}
                           onChange={(key, value, index) => {
-                            let list = [...formik.values.repWeightList]
+                            let list = [...formik.values.repList]
                             list[index] = {...list[index], [key]: value}
                             console.log(list)
-                            formik.setFieldValue('repWeightList', list)
+                            formik.setFieldValue('repList', list)
                           }}  
                         />
                       </div>
@@ -204,7 +226,11 @@ const ExerciseLog = () =>  {
               </>
               } 
           </div>
-          <CustomButton className='flex flex-center mt-5 mb-10' onClick={() => formik.handleSubmit()}>Log Exercise</CustomButton>
+          <CustomButton 
+            className='flex flex-center mt-5 mb-10' 
+            onClick={() => formik.handleSubmit()}
+            loading={logging}
+          >Log Exercise</CustomButton>
         </form>
       </div>
   );
