@@ -8,8 +8,10 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup'
 import CustomButton from '../common/CustomButton';
 import { Tooltip } from 'antd';
-import { CaretLeftOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { CaretLeftOutlined, FrownOutlined, InfoCircleOutlined, LoadingOutlined, SearchOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+
+
 
 const RepWeightInput = ({index, reps, weight, onChange}) => 
 <div className='flex gap-4 items-center justify-center2 mb-5'>
@@ -48,7 +50,9 @@ const ExerciseLog = () =>  {
   const [options, _setOptions] = useState({
     exercises: []
   })
-  const setOptions = (field, value) => _setOptions({...options, [field] : value})
+  const setOptions = (field, value) => _setOptions((oldOptions) => {
+    return {...oldOptions, [field] : value}
+  })
 
   const [loading, _setLoading] = useState({
     exercises: false
@@ -72,7 +76,7 @@ const ExerciseLog = () =>  {
     }
 
     setLogging(true)
-    client.post('/log-exercise', payload ).then((res) => {
+    client.post('/exercise/log-exercise', payload ).then((res) => {
       console.log(res)
       formik.resetForm()
     }).catch(e => {
@@ -107,20 +111,22 @@ const ExerciseLog = () =>  {
     },
   });
 
-  const getExcercises = (name) => {
-    if(!name) return
+  const getExcercises = (search) => {
+    if(!search) return
     setLoading('exercises', true)
-    client.get('/exercise', { params: {name} }).then((res) => {
+
+    client.get('/exercise', { params: {search} }).then((res) => {
       console.log(res.data)
-      setOptions('exercises', res.data)
+      // setOptions('exercises', res.data)
+      _setOptions({
+        exercises: res.data
+      })
     }).catch(e => {
       console.log(e,'error')
     }).finally(() => {
       setLoading('exercises', false)
     })
   }
-
-  console.log('formik.values', formik.values)
 
   return (
     <div className='pt-5 h-screen p-5 bg-red'>
@@ -139,6 +145,11 @@ const ExerciseLog = () =>  {
             placeholder='Select exercise'
             value={formik.values.selectedExercise}
             options={options.exercises} 
+            notFoundContent={{
+              typing: {icon: <LoadingOutlined style={{fontSize: '40px'}} />, text: 'Searching exercies'},
+              loading: {icon: <LoadingOutlined style={{fontSize: '40px'}} />, text: 'Searching exercies'},
+              notFound: {icon: <FrownOutlined style={{fontSize: '40px'}} />, text: 'Unable to find exercise'},
+              idle: {icon: <SearchOutlined style={{fontSize: '40px'}} />, text: 'Type to search exercise'}}}           
             debounceSearch
             onSearch={(e) => getExcercises(e)}
             onSelect={value => {

@@ -2,14 +2,14 @@ import { Select } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 
 
-import React, { useCallback, useState } from 'react'
-import { FrownOutlined, LoadingOutlined, SearchOutlined } from '@ant-design/icons';
+import React, { useCallback, useEffect, useState } from 'react'
+import { LoadingOutlined } from '@ant-design/icons';
 import debounce from 'lodash.debounce';
 
 const { Option } = Select
 
 const CustomSelect = ({placeholder, options, name, className, onSearch, onSelect, suffix, debounceSearch, value,
-  valueKey, labelKey, randomKey = false, loading, label, formikHook: formik, showError, errorText, optionSuffix}) => {
+  valueKey, labelKey, randomKey = false, loading, label, formikHook: formik, showError, errorText, optionSuffix, notFoundContent}) => {
 
     if (formik && name) {
       showError = showError || (formik.touched[name] && !!formik.errors[name])
@@ -35,6 +35,21 @@ const CustomSelect = ({placeholder, options, name, className, onSearch, onSelect
       debounceFn(e);
     }
 
+    const renderNotFoundContent = () => {
+
+      if(typeof notFoundContent === 'function') return notFoundContent()
+      else return <div className='h-20 flex-col flex-center cursor-default'>
+                    {searchText ? typing ? notFoundContent?.typing?.icon
+                      : loading ? notFoundContent?.loading?.icon : notFoundContent?.notFound?.icon
+                        : notFoundContent?.idle?.icon }
+                      <div className='mt-2'>
+                        {searchText ? typing ? notFoundContent?.typing?.text : 
+                          loading ? notFoundContent?.loading?.text : notFoundContent?.notFound?.text
+                            : notFoundContent?.idle?.text}
+                      </div>
+                  </div>
+    }
+
   return (
     <div className={className}>
         {label && <div className='poppins-500-12 mb-1'>{label}</div>}
@@ -52,15 +67,7 @@ const CustomSelect = ({placeholder, options, name, className, onSearch, onSelect
             // }
             // loading={loading}
             suffixIcon={loading ? <LoadingOutlined style={{color: '#4096ff', fontSize: '20'}} /> : suffix}
-            notFoundContent={
-            <div className='h-20 flex-col flex-center cursor-default'>
-              {searchText ? typing ? <LoadingOutlined style={{fontSize: '40px'}} /> 
-                : loading ? <LoadingOutlined style={{fontSize: '40px'}} /> : <FrownOutlined style={{fontSize: '40px'}} /> 
-                  : <SearchOutlined style={{fontSize: '40px'}} />}
-                <div className='mt-2'>
-                  {searchText ? typing ? 'Searching exercies' : loading ? 'Searching exercies' : 'Unable to find exercise' : 'Type to search exercise'}
-                </div>
-            </div>}
+            notFoundContent={ notFoundContent && renderNotFoundContent()}
         >
             {options.map((option) => (
               <Option key={randomKey ? uuidv4() : option[valueKey]} value={option[valueKey]}>
@@ -77,8 +84,9 @@ const CustomSelect = ({placeholder, options, name, className, onSearch, onSelect
         </Select>
         {showError && <div className='poppins-500-11 mb-1 text-crimson mt-0.5'>{errorText}</div>}
     </div>
-    
   )
 }
+
+
 
 export default CustomSelect

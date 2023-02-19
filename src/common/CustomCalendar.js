@@ -3,15 +3,14 @@ import { Calendar } from '@hassanmojab/react-modern-calendar-datepicker';
 
 import React, { useState } from 'react'
 
-const CustomCalendar = ({className}) => {
-    const [selectedDay, setSelectedDay] = useState(null);
+const CustomCalendar = ({value,onChange}) => {
     return (
         <Calendar
             calendarClassName={'custom-calendar'}
             calendarTodayClassName="custom-calendar-today" 
             colorPrimary="crimson"
-            value={selectedDay}
-            onChange={setSelectedDay}
+            value={value}
+            onChange={onChange}
             shouldHighlightWeekends
         />) 
 }

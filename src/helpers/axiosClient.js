@@ -1,9 +1,11 @@
 import axios from "axios";
 
+const { REACT_APP_API_URL, REACT_APP_API_VERSION } = process.env
+console.log(REACT_APP_API_URL, REACT_APP_API_VERSION)
+
 const client = axios.create({
-    baseURL: process.env.REACT_APP_API,
+    baseURL: `${REACT_APP_API_URL}/${REACT_APP_API_VERSION}`,
     // timeout: 1000,
-    // headers: {'X-Api-Key': REACT_APP_EXCERCISES_API_KEY}
 });
 
 export default client
