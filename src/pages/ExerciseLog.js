@@ -10,8 +10,7 @@ import CustomButton from '../common/CustomButton';
 import { Tooltip } from 'antd';
 import { CaretLeftOutlined, FrownOutlined, InfoCircleOutlined, LoadingOutlined, SearchOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-
-
+import { useMessage } from '../hooks/useMessage';
 
 const RepWeightInput = ({index, reps, weight, onChange}) => 
 <div className='flex gap-4 items-center justify-center2 mb-5'>
@@ -54,6 +53,7 @@ const ExerciseLog = () =>  {
     return {...oldOptions, [field] : value}
   })
 
+  const [message, messageContext] = useMessage()
   const [loading, _setLoading] = useState({
     exercises: false
   })
@@ -77,14 +77,16 @@ const ExerciseLog = () =>  {
 
     setLogging(true)
     client.post('/exercise/log-exercise', payload ).then((res) => {
-      console.log(res)
       formik.resetForm()
+      message.success(res.data.message)
     }).catch(e => {
       console.log(e,'error')
+      message.error(payload.message)
     }).finally(() => {
       setLogging(false)
     })
   }
+
 
   const formik = useFormik({
     initialValues: {
@@ -117,10 +119,7 @@ const ExerciseLog = () =>  {
 
     client.get('/exercise', { params: {search} }).then((res) => {
       console.log(res.data)
-      // setOptions('exercises', res.data)
-      _setOptions({
-        exercises: res.data
-      })
+      setOptions('exercises', res.data)
     }).catch(e => {
       console.log(e,'error')
     }).finally(() => {
@@ -130,6 +129,7 @@ const ExerciseLog = () =>  {
 
   return (
     <div className='pt-5 h-screen p-5 bg-red'>
+      {messageContext}
       <div>
         <CustomButton 
           type='dashed' 
