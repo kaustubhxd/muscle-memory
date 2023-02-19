@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import client from '../helpers/axiosClient';
 import CustomTable from '../common/CustomTable';
 import dayjs from 'dayjs';
-import { ClockCircleOutlined } from '@ant-design/icons';
+import { ClockCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 
 var objectSupport = require("dayjs/plugin/objectSupport");
 dayjs.extend(objectSupport);
@@ -19,6 +19,8 @@ const Home = () => {
     const navigate = useNavigate()
 
     const [exerciseLog, setExerciseLog] = useState([])
+    const [exerciseLogLoading, setExerciseLogLoading] = useState(true)
+
 
     const columns = [
         {
@@ -36,13 +38,14 @@ const Home = () => {
     console.log(process.env)
 
     const getExerciseLog = (date = dayjs().format('YYYY-MM-DD') ) => {
+        setExerciseLogLoading(true)
         client.get('/exercise/exercise-log', {params: {date}} ).then((res) => {
             console.log(res.data)
             setExerciseLog(res.data)
           }).catch(e => {
             console.log(e,'error')
           }).finally(() => {
-            
+            setExerciseLogLoading(false)
           })
     }
 
@@ -56,8 +59,8 @@ const Home = () => {
     <div>Weight: {weight}</div>
   </div>
 
-    const renderSets = (reps,weight, is_consistent) => {
-      if(is_consistent) return repWeightInfo(reps,weight)
+    const renderSets = (reps,weight, isConsistent) => {
+      if(isConsistent) return repWeightInfo(reps,weight)
       return reps.split(',').map((repsInstance, index) => repWeightInfo(repsInstance, weight.split(',')[index], index + 1))
     }
 
@@ -90,6 +93,10 @@ const Home = () => {
             </div> }
             {/* <CustomTable columns={columns} data={exerciseLog}/> */}
             <div className='w-[90%]'>
+              {exerciseLogLoading && 
+                <div className='w-full flex items-center justify-center mb-3'>
+                  <LoadingOutlined style={{ fontSize: 24 }} spin />
+                </div>}
               {exerciseLog.map(({name, sets, reps, weight, isConsistent, createdOn}) => 
                 <div className='rounded-xl border border-ant-blue p-4 flex flex-col mb-2' key={createdOn}>
                   <div className='poppins-500-14'>{name}</div>  
