@@ -75,6 +75,8 @@ const Home = () => {
                 const formatDate = dayjs({day,month: month - 1, year}).format('YYYY-MM-DD')
                 console.log(formatDate)
 
+                setSelectedDay(date)
+
                 getExerciseLog(formatDate)
               }} 
             />
