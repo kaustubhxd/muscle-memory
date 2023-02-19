@@ -50,7 +50,11 @@
     font-weight: 500;
     font-size: 15px;
   }
-  
+  .poppins-500-18 {
+    font-family: Poppins;
+    font-weight: 500;
+    font-size: 1.125rem;
+  }
   .poppins-600-13 {
     font-family: Poppins;
     font-weight: 600;

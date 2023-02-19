@@ -3,6 +3,9 @@ import './App.css';
 import ExerciseLog from './pages/ExerciseLog';
 import Home from './pages/Home';
 import { HashRouter as Router } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import client from './helpers/axiosClient';
+import CustomSplashScreen from './common/CustomSplashScreen';
 
 // function ProtectedRoute({ children }) {
 //   // logout due to inactivity
@@ -28,11 +31,22 @@ import { HashRouter as Router } from 'react-router-dom';
 //   return <Outlet />
 // }
 
+
 function App() {
+
+  const [serverOnline, setServerOnline] = useState(false)
+
+  useEffect(() => {
+    console.log('Checking server status')
+    client.get('').then((res) => {
+      if(res.status === 200) setServerOnline(true)
+    })
+  },[])
+  
 
   return (
     <div>
-      <Router>
+      {serverOnline ? <Router>
         <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/log" element={<ExerciseLog />} />
@@ -41,8 +55,8 @@ function App() {
               <Route path="/summary" element={<Summary />} />
             </Route> */}
           </Routes>
-      </Router>
-        
+      </Router> 
+      : <CustomSplashScreen />}
     </div>
   );
 }
