@@ -21,7 +21,6 @@ const RepWeightInput = ({index, reps, weight, onChange}) =>
       value={reps}
       min={1}
       onChange={(value) => {
-        console.log(value)
         onChange('reps', value, index)
         // formik.setFieldValue('reps', value)
       }}
@@ -36,7 +35,6 @@ const RepWeightInput = ({index, reps, weight, onChange}) =>
       step={2.5}
       value={weight}
       onChange={(value) => {
-        console.log(value)
         onChange('weight', value,index)
         // formik.setFieldValue('weight', value)
       }}
@@ -68,7 +66,6 @@ const ExerciseLog = () =>  {
   const DEFAULT_WEIGHT = 2.5
 
   const handleLogExercise = (values) => {
-    console.log('onSubmit', values)
     const {selectedExercise : name, isConsistent, sets, repList} = values
 
     const payload = {
@@ -118,7 +115,6 @@ const ExerciseLog = () =>  {
     setLoading('exercises', true)
 
     client.get('/exercise', { params: {search} }).then((res) => {
-      console.log(res.data)
       setOptions('exercises', res.data)
     }).catch(e => {
       console.log(e,'error')
@@ -153,12 +149,10 @@ const ExerciseLog = () =>  {
             debounceSearch
             onSearch={(e) => getExcercises(e)}
             onSelect={value => {
-              console.log(value)
               formik.setFieldValue('selectedExercise', value)
             }}
             optionSuffix={(option) =>   
               <Tooltip title={<div className='poppins-500-11' onClick={() => {
-                console.log('gefe')
                 window.focus()
               }}>{option.instructions}</div>} placement='bottom' trigger='click'>
                 <div><InfoCircleOutlined /></div>
@@ -178,7 +172,6 @@ const ExerciseLog = () =>  {
                 min={1}
                 value={formik.values.sets}
                 onChange={(value) => {
-                  console.log(value)
                   formik.setFieldValue('sets', value)
                   if(!formik.values.isConsistent) formik.setFieldValue('repList', Array.from(Array(value).keys()).map(() => { return {reps: DEFAULT_REPS, weight: DEFAULT_WEIGHT} }))
                 }}
@@ -192,7 +185,6 @@ const ExerciseLog = () =>  {
                   checkedText="Consistent"
                   uncheckedText="Variant"
                   onChange={(isConsistent) => {
-                    console.log(isConsistent)
                     formik.setFieldValue('isConsistent', isConsistent)
                     if(!isConsistent) formik.setFieldValue('repList', Array.from(Array(formik.values.sets).keys()).map(() => { return {reps: DEFAULT_REPS, weight: DEFAULT_WEIGHT} }))
 
@@ -227,7 +219,6 @@ const ExerciseLog = () =>  {
                           onChange={(key, value, index) => {
                             let list = [...formik.values.repList]
                             list[index] = {...list[index], [key]: value}
-                            console.log(list)
                             formik.setFieldValue('repList', list)
                           }}  
                         />
