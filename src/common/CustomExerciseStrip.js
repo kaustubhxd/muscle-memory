@@ -8,11 +8,11 @@ const CustomExerciseStrip = ({className}) => {
         >
             <div className='m-5 poppins-400-16 w-full flex gap-2'>
                 <div>Barbell bench press</div>
-                <img src='/assets/icons/tick-circle-solid.svg' alt='✅' />
+                <img src='./assets/icons/tick-circle-solid.svg' alt='✅' />
             </div>
 
             <div className='w-[50px] min-w-[50px] border-l h-full flex-center cursor-pointer'>
-                <img src='/assets/icons/info-outline-rounded.svg' alt='ℹ️' />
+                <img src='./assets/icons/info-outline-rounded.svg' alt='ℹ️' />
             </div>
         </div>
     </div>
