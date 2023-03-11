@@ -14,7 +14,7 @@ const CustomNavbar = () => {
   return (
     <div className='absolute bottom-0 left-0 h-20 w-full bg-[#EFF4FA] flex'>
        <CustomNavOption title='Track' icon='/assets/icons/track.svg' altIcon='✏️' />
-       <CustomNavOption title='Progress' icon='/assets/icons/progress.svg' altIcon='📊' />
+       <CustomNavOption title='Progress' icon='./assets/icons/progress.svg' altIcon='📊' />
     </div>
   )
 }
