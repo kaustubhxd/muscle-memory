@@ -6,6 +6,7 @@ import { HashRouter as Router } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import client from './helpers/axiosClient';
 import CustomSplashScreen from './common/CustomSplashScreen';
+import NewHome from './pages/NewHome';
 
 // function ProtectedRoute({ children }) {
 //   // logout due to inactivity
@@ -49,8 +50,10 @@ function App() {
       {serverOnline ? <Router>
         <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/log" element={<ExerciseLog />} />
+            <Route path="/new" element={<NewHome />} />
 
+            <Route path="/log" element={<ExerciseLog />} />
+            
             {/* <Route element={<ProtectedRoute />}>
               <Route path="/summary" element={<Summary />} />
             </Route> */}
