@@ -12,7 +12,7 @@ const CustomExerciseStrip = ({className}) => {
             </div>
 
             <div className='w-[50px] min-w-[50px] border-l h-full flex-center cursor-pointer'>
-                <img src='./assets/icons/info-outline-rounded.svg' alt='ℹ️' />
+                <img src='./assets/icons/info-outline-rounded.svg' className='w-[22px]' alt='ℹ️' />
             </div>
         </div>
     </div>
